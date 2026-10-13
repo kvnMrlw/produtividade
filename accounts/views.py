@@ -18,6 +18,10 @@ def cadastro(request):
         if user:
             return redirect('/auth/cadastro/?status=0')
 
+        email = User.objects.filter(email=email).first()
+        if email:
+            return redirect('/auth/cadastro/?status=1')
+
         if password != confirm_password:
             return redirect('/auth/cadastro/?status=2')
 
