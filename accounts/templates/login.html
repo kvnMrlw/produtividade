@@ -20,6 +20,10 @@
         <a href="#">Esqueceu sua senha?</a>
             <br>
         <input type="submit" value="Enviar">
+
+        {% if erro %}
+            <p class="alert alert-danger">{{ erro }}</p>
+        {% endif %}
         
     </form>
 </body>
