@@ -8,8 +8,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 def cadastro(request):
     if request.method == "GET":
-        status = request.GET.get('status')
-        return render (request, 'cadastro.html', {'status': status})
+        return render (request, 'cadastro.html')
     
     elif request.method == "POST":
         username = request.POST.get('username')
@@ -17,18 +16,26 @@ def cadastro(request):
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
 
-        user = User.objects.filter(username=username).first()
-        if user:
-            return redirect('/auth/cadastro/?status=0')
+        erros = {}
 
-        email = User.objects.filter(email=email).first()
-        if email:
-            return redirect('/auth/cadastro/?status=1')
+        if User.objects.filter(username=username).exists():
+            erros['username'] = "Este nome de usuario já existe"
+
+        if User.objects.filter(email=email).exists():
+            erros['email'] = "Por favor adicione um email válido"
 
         if password != confirm_password:
-            return redirect('/auth/cadastro/?status=2')
+            erros['password'] = "Insira uma senha válida"
 
-        user = User.objects.create_user(username=username, email=email, password=password)
+
+        if erros:
+            return render(request, "cadastro.html", {
+                'erros': erros,
+                'username': username,
+                'email': email
+            })
+
+        User.objects.create_user(username=username, email=email, password=password)
 
         return redirect('/auth/login')
 

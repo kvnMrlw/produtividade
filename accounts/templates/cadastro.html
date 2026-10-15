@@ -8,21 +8,22 @@
 <body>
     <h1>Cadastro</h1>
 
-    <form action="{% url 'cadastro' %}" method="POST"> {% csrf_token %}
+    <form action="{% url 'cadastro' %}" method="POST">
+    {% csrf_token %}
 
         <label for="username">Username</label><br>
-        <input type="text" placeholder="Username..." id="username" name="username" required>
+        <input type="text" placeholder="Username..." id="username" name="username" value="{% if not erros.username %}{{ username|default:''}}{% endif %}" required>
 
-            {% if status == '0' %}
-                <p class="alert alert-danger">Este nome de usuario já existe</p>
+            {% if erros.username %}
+                <p class="alert alert-danger">{{ erros.username }}</p>
             {% endif %}
 
-            <br>
+            <br> 
         <label for="email">Email</label><br>
-        <input type="email" placeholder="Email..." id="email" name="email" required>
+        <input type="email" placeholder="Email..." id="email" name="email" value="{% if not erros.email %}{{ email|default:''}}{% endif %}" required>
 
-            {% if status == '1' %}
-                <p class="alert alert-danger">Por favor cadastre um email válido</p>
+            {% if erros.email %}
+                <p class="alert alert-danger">{{ erros.email }}</p>
             {% endif %}
             
             <br>
@@ -32,8 +33,8 @@
         <label for="confirm_password">Confime sua senha</label><br>
         <input type="password" placeholder="Senha..." id="confirm_password" name="confirm_password">
 
-            {% if status == '2' %}
-                <p>As senhas estão dando divergencia nos valores</p>
+            {% if erros.password %}
+                <p class="alert alert-danger">{{ erros.password }} </p>
             {% endif %}
 
             <br>
