@@ -6,7 +6,6 @@ from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, 
 urlpatterns = [
     path('cadastro/', views.cadastro, name='cadastro'),
     path('login/', views.login, name='login'),
-    path('plataforma/', views.plataforma, name='plataforma'),
 
     path('password_reset/',
         PasswordResetView.as_view(

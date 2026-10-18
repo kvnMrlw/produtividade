@@ -50,13 +50,8 @@ def login(request):
 
         if user:
             log(request, user)
-            return redirect("plataforma")
+            return redirect("/tasks/tutorial")
         else:
             return render(request, "login.html", {
                 'erro': "Usuario ou senha incorreto"
             })
-
-
-@login_required
-def plataforma(request):
-    return HttpResponse("plataforma")
