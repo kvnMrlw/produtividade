@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as log
 from django.contrib.auth.decorators import login_required
 
+from .models import Profile
+
 # Create your views here.
 def cadastro(request):
     if request.method == "GET":
@@ -50,8 +52,20 @@ def login(request):
 
         if user:
             log(request, user)
-            return redirect("/tasks/tutorial")
+            if not user.profile.viu_tutorial:
+                return redirect("tutorial")
+            return redirect("dashboard")
         else:
             return render(request, "login.html", {
                 'erro': "Usuario ou senha incorreto"
             })
+
+
+@login_required
+def tutorial(request):
+    if request.method == "POST":
+        profile = Profile.objects.get(user=request.user)
+        profile.viu_tutorial = True
+        profile.save()
+        return redirect("/tasks/dashboard/")
+    return render(request, 'tutorial.html')
